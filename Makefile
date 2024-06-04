@@ -76,25 +76,25 @@ ifeq ($(BIND_SQLITE), 1)
 endif
 
 ifeq ($(BIND_WALDIONEW), 1)
-	CXXFLAGS += -I/home/huyp/sqlite/WALDIO-new
-	LDFLAGS += -L/home/huyp/sqlite/WALDIO-new
-	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/sqlite/WALDIO-new
+	CXXFLAGS += -I../WALDIO-new
+	LDFLAGS += -L../WALDIO-new
+	LDFLAGS += -lsqlite3 -Wl,-rpath,../WALDIO-new
 
 	SOURCES += $(wildcard sqlite/*.cc)
 endif
 
 ifeq ($(BIND_WALDIO), 1)
-	CXXFLAGS += -I/home/huyp/sqlite/WALDIO/bin/
-	LDFLAGS += -L/home/huyp/sqlite/WALDIO/bin/
-	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/sqlite/WALDIO/bin/
+	CXXFLAGS += -I../WALDIO/
+	LDFLAGS += -L../WALDIO/build
+	LDFLAGS += -lsqlite3 -Wl,-rpath,../WALDIO/build
 
 	SOURCES += $(wildcard sqlite/*.cc)
 endif
 
 ifeq ($(BIND_DIRECT), 1)
-	CXXFLAGS += -I/home/huyp/sqlite/directsql/bin/
-	LDFLAGS += -L/home/huyp/sqlite/directsql/bin/
-	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/sqlite/directsql/bin/
+	CXXFLAGS += -I../directsql/
+	LDFLAGS += -L../directsql/
+	LDFLAGS += -lsqlite3 -Wl,-rpath,../directsql/
 
 	SOURCES += $(wildcard sqlite/*.cc)
 endif
