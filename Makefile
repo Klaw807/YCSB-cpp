@@ -15,20 +15,26 @@ BIND_WIREDTIGER ?= 0
 BIND_LEVELDB ?= 0
 BIND_ROCKSDB ?= 0
 BIND_LMDB ?= 0
-BIND_SQLITE ?= 0
+# BIND_SQLITE = 1
+
+BIND_SQLITE = 0
+BIND_WALDIO = 1
+BIND_WALDIONEW = 0
+BIND_DIRECT = 0
 
 # Extra options
-DEBUG_BUILD ?=
+DEBUG_BUILD = 1 # yyx
+# DEBUG_BUILD ?=
 EXTRA_CXXFLAGS ?=
 EXTRA_LDFLAGS ?=
 
 # HdrHistogram for tail latency report
-BIND_HDRHISTOGRAM ?= 1
+BIND_HDRHISTOGRAM = 1
 # Build and statically link library, submodule required
-BUILD_HDRHISTOGRAM ?= 1
+BUILD_HDRHISTOGRAM = 1
 
 #----------------------------------------------------------
-
+CXXFLAGS += -g -O0 # yyx force debuging, don't know why the following code doesn't work
 ifeq ($(DEBUG_BUILD), 1)
 	CXXFLAGS += -g
 else
@@ -56,8 +62,40 @@ ifeq ($(BIND_LMDB), 1)
 	SOURCES += $(wildcard lmdb/*.cc)
 endif
 
+# Modify
 ifeq ($(BIND_SQLITE), 1)
-	LDFLAGS += -lsqlite3
+	CXXFLAGS += -I/home/huyp/bpf-sqlite/origin_sqlite/build
+	LDFLAGS += -L/home/huyp/bpf-sqlite/origin_sqlite/build/lib
+	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/bpf-sqlite/origin_sqlite/build/lib
+
+	# CXXFLAGS += -I/home/huyp/libsql/build
+	# LDFLAGS += -L/home/huyp/libsql/build/lib
+	# LDFLAGS += -llibsql -Wl,-rpath,/home/huyp/libsql/build/lib
+
+	SOURCES += $(wildcard sqlite/*.cc)
+endif
+
+ifeq ($(BIND_WALDIONEW), 1)
+	CXXFLAGS += -I/home/huyp/sqlite/WALDIO-new
+	LDFLAGS += -L/home/huyp/sqlite/WALDIO-new
+	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/sqlite/WALDIO-new
+
+	SOURCES += $(wildcard sqlite/*.cc)
+endif
+
+ifeq ($(BIND_WALDIO), 1)
+	CXXFLAGS += -I/home/huyp/sqlite/WALDIO/bin/
+	LDFLAGS += -L/home/huyp/sqlite/WALDIO/bin/
+	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/sqlite/WALDIO/bin/
+
+	SOURCES += $(wildcard sqlite/*.cc)
+endif
+
+ifeq ($(BIND_DIRECT), 1)
+	CXXFLAGS += -I/home/huyp/sqlite/directsql/bin/
+	LDFLAGS += -L/home/huyp/sqlite/directsql/bin/
+	LDFLAGS += -lsqlite3 -Wl,-rpath,/home/huyp/sqlite/directsql/bin/
+
 	SOURCES += $(wildcard sqlite/*.cc)
 endif
 
